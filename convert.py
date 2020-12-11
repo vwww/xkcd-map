@@ -84,13 +84,15 @@ if FULL_QUALITY:
 						tile = load_img(MAXIMUM_ZOOM, x * tilefactor + xx, y * tilefactor + yy)
 						if tile is None:
 							continue
-						tile.thumbnail((tilesize, tilesize), DOWNSCALE_TYPE)
-						im.paste(tile, (tilesize * xx, tilesize * yy))
+						with tile:
+							tile.thumbnail((tilesize, tilesize), DOWNSCALE_TYPE)
+							im.paste(tile, (tilesize * xx, tilesize * yy))
 						found += 1
 				if found or True:
 					if tilequality != 256:
 						im.thumbnail((256, 256), DOWNSCALE_TYPE)
 					write_img(im, zoom, x, y)
+				im.close()
 else:
 	# old method: reuse tiles already rendered
 	for zoom in xrange(MAXIMUM_ZOOM-1, -1, -1):
@@ -101,15 +103,16 @@ else:
 					color = (36,36,36) #(0,0,0)
 				else:
 					color = (176,226,255) #(255, 255, 255)
-				im = Image.new("RGB", (512, 512), color)
-				found = 0
-				for xx in (0, 1):
-					for yy in (0, 1):
-						tile = load_img(zoom+1, x*2+xx, y*2+yy)
-						if tile is None:
-							continue
-						im.paste(tile, (256 * xx, 256 * yy))
-						found += 1
-				if found:
-					im.thumbnail((256, 256), DOWNSCALE_TYPE)
-					write_img(im, zoom, x, y)
+				with im as Image.new("RGB", (512, 512), color):
+					found = 0
+					for xx in (0, 1):
+						for yy in (0, 1):
+							tile = load_img(zoom+1, x*2+xx, y*2+yy)
+							if tile is None:
+								continue
+							with tile:
+								im.paste(tile, (256 * xx, 256 * yy))
+							found += 1
+					if found:
+						im.thumbnail((256, 256), DOWNSCALE_TYPE)
+						write_img(im, zoom, x, y)
