@@ -103,7 +103,7 @@ else:
 					color = (36,36,36) #(0,0,0)
 				else:
 					color = (176,226,255) #(255, 255, 255)
-				with im as Image.new("RGB", (512, 512), color):
+				with Image.new("RGB", (512, 512), color) as im:
 					found = 0
 					for xx in (0, 1):
 						for yy in (0, 1):
