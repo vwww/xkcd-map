@@ -8,8 +8,8 @@ from PIL import Image
 MAXIMUM_ZOOM = 10
 FULL_QUALITY = 0
 # FULL_QUALITY should be at least 2 ** MAXIMUM_ZOOM
-# tested 2048 & ANTIALIAS: it is very slow and causes shifting error (similar to using 0 & BILINEAR)
-DOWNSCALE_TYPE = Image.ANTIALIAS # Image.BILINEAR
+# tested 2048 & LANCZOS: it is very slow and causes shifting error (similar to using 0 & BILINEAR)
+DOWNSCALE_TYPE = Image.LANCZOS # Image.BILINEAR
 
 worldmap = {}
 
