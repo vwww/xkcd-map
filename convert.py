@@ -19,7 +19,7 @@ if not os.path.isdir("converted"):
 for name in os.listdir("tiles"):
     m = re.match("^([0-9]+)(s|n)([0-9]+)(w|e).png$", name)
     if m is None:
-        print "fail", name
+        print("fail", name)
         continue
     y, yy, x, xx = m.groups()
     x, y = int(x), int(y)
@@ -34,7 +34,7 @@ for name in os.listdir("tiles"):
     else:
         y = 63 + y
 
-    print x, y
+    print(x, y)
 
     worldmap[x, y] = name
 
@@ -42,7 +42,7 @@ available = set()
 
 def write_img(im, zoom, x, y):
     im.save('converted/%d-%d-%d.png' % (zoom, x, y))
-    print 'save %d %d %d' % (zoom, x, y)
+    print('save %d %d %d' % (zoom, x, y))
     available.add((zoom, x, y))
 
 def load_img(zoom, x, y):
@@ -52,24 +52,24 @@ def load_img(zoom, x, y):
     return Image.open('converted/%d-%d-%d.png' % (zoom, x, y))
 
 # render first set of tiles
-for (x, y), name in worldmap.iteritems():
+for (x, y), name in worldmap.items():
 	im = Image.open('tiles/%s' % name)
-	for xx in xrange(8):
-		for yy in xrange(8):
+	for xx in range(8):
+		for yy in range(8):
 			#part = im.crop((256 * xx, 256 * yy, 256 * (xx+1), 256 * (yy+1)))
 			#write_img(part, MAXIMUM_ZOOM, x * 8 + xx, y * 8 + yy)
 			available.add((MAXIMUM_ZOOM, x * 8 + xx, y * 8 + yy))#debug
 
 if FULL_QUALITY:
 	# new method: render every tile
-	for zoom in xrange(MAXIMUM_ZOOM-1):
-		print "zoom", zoom
+	for zoom in range(MAXIMUM_ZOOM-1):
+		print("zoom", zoom)
 		tilefactor = 2 ** (MAXIMUM_ZOOM - zoom)
 		tilecount = 2 ** zoom
 		tilequality = min(FULL_QUALITY, 256 * tilefactor)
 		tilesize = tilequality / tilefactor
-		for x in xrange(tilecount):
-			for y in xrange(tilecount):
+		for x in range(tilecount):
+			for y in range(tilecount):
 				if y >= (tilecount / 2):
 					color = (36,36,36) #(0,0,0)
 				else:
@@ -79,8 +79,8 @@ if FULL_QUALITY:
 					im.paste((176,226,255), (0, 0, tilequality, tilequality / 2))
 					#im.paste((36,36,36), (0, tilequality / 2, tilequality, tilequality))
 				found = 0
-				for xx in xrange(tilefactor):
-					for yy in xrange(tilefactor):
+				for xx in range(tilefactor):
+					for yy in range(tilefactor):
 						tile = load_img(MAXIMUM_ZOOM, x * tilefactor + xx, y * tilefactor + yy)
 						if tile is None:
 							continue
@@ -95,10 +95,10 @@ if FULL_QUALITY:
 				im.close()
 else:
 	# old method: reuse tiles already rendered
-	for zoom in xrange(MAXIMUM_ZOOM-1, -1, -1):
-		print "zoom", zoom
-		for x in xrange(2**zoom):
-			for y in xrange(2**zoom):
+	for zoom in range(MAXIMUM_ZOOM-1, -1, -1):
+		print("zoom", zoom)
+		for x in range(2**zoom):
+			for y in range(2**zoom):
 				if y >= (2**(zoom-1)):
 					color = (36,36,36) #(0,0,0)
 				else:
