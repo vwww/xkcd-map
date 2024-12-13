@@ -56,9 +56,9 @@ for (x, y), name in worldmap.items():
 	im = Image.open('tiles/%s' % name)
 	for xx in range(8):
 		for yy in range(8):
-			#part = im.crop((256 * xx, 256 * yy, 256 * (xx+1), 256 * (yy+1)))
-			#write_img(part, MAXIMUM_ZOOM, x * 8 + xx, y * 8 + yy)
-			available.add((MAXIMUM_ZOOM, x * 8 + xx, y * 8 + yy))#debug
+			part = im.crop((256 * xx, 256 * yy, 256 * (xx+1), 256 * (yy+1)))
+			write_img(part, MAXIMUM_ZOOM, x * 8 + xx, y * 8 + yy)
+			#available.add((MAXIMUM_ZOOM, x * 8 + xx, y * 8 + yy))#debug
 
 if FULL_QUALITY:
 	# new method: render every tile
